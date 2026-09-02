@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Capacity Connect LMS</title>
+<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css">
+<script defer src="https://pyscript.net/alpha/pyscript.js"></script>""
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#eef2ff,#f8fafc,#e0f2fe);
+    color:#1e293b;
+}
+
+/* ================= HEADER ================= */
+
+header{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    padding:35px 20px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(37,99,235,.3);
+}
+
+header h1{
+    font-size:38px;
+    letter-spacing:2px;
+}
+
+header p{
+    margin-top:8px;
+    font-size:16px;
+    opacity:.9;
+}
+
+/* ================= LOGIN AREA ================= */
+
+.auth-container{
+    min-height:calc(100vh - 150px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+.login-box{
+    width:420px;
+    background:rgba(255,255,255,.95);
+    padding:35px;
+    border-radius:25px;
+    box-shadow:0 20px 50px rgba(0,0,0,.15);
+    animation:slideUp .6s ease;
+}
+
+@keyframes slideUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.login-box h2{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:8px;
+    font-size:28px;
+}
+
+.login-box .subtitle{
+    text-align:center;
+    color:#64748b;
+    margin-bottom:25px;
+}
+
+.input-group{
+    margin-bottom:16px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:600;
+}
+
+.login-box input{
+    width:100%;
+    padding:13px 15px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    outline:none;
+    font-size:15px;
+    transition:.3s;
+}
+
+.login-box input:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+.main-btn{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.main-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(37,99,235,.3);
+}
+
+.switch{
+    text-align:center;
+    margin-top:20px;
+    color:#64748b;
+}
+
+.switch a{
+    color:#2563eb;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* DEMO LOGIN */
+
+.demo-users{
+    margin-top:20px;
+    background:#eff6ff;
+    padding:15px;
+    border-radius:12px;
+    font-size:14px;
+}
+
+.demo-users h4{
+    color:#2563eb;
+    margin-bottom:8px;
+}
+
+.demo-users p{
+    margin:5px 0;
+}
+
+/* ================= NAVBAR ================= */
+
+nav{
+    background:white;
+    padding:14px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 3px 15px rgba(0,0,0,.08);
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:21px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+nav ul{
+    list-style:none;
+    display:flex;
+    gap:25px;
+}
+
+nav ul li a{
+    color:#334155;
+    text-decoration:none;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+nav ul li a:hover{
+    color:#2563eb;
+}
+
+.user-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.user-name{
+    background:#eff6ff;
+    color:#2563eb;
+    padding:8px 13px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.logout{
+    background:#ef4444;
+    color:white;
+    border:none;
+    padding:8px 13px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.logout:hover{
+    background:#dc2626;
+}
+
+/* ================= CONTENT ================= */
+
+section{
+    padding:45px 7%;
+}
+
+.section-title{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.section-subtitle{
+    color:#64748b;
+    margin-bottom:25px;
+}
+
+/* ================= CARDS ================= */
+
+.card-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:rgba(255,255,255,.9);
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    transition:.35s;
+    border:1px solid #e2e8f0;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(37,99,235,.15);
+}
+
+.card-icon{
+    width:50px;
+    height:50px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:14px;
+    background:#eff6ff;
+    font-size:25px;
+    margin-bottom:15px;
+}
+
+.card h3{
+    color:#2563eb;
+    margin-bottom:10px;
+}
+
+.card p{
+    color:#64748b;
+    line-height:1.5;
+}
+
+.stat-number{
+    font-size:30px;
+    font-weight:bold;
+    color:#0f172a;
+    margin-top:8px;
+}
+
+/* ================= COURSE ================= */
+
+.course-card{
+    position:relative;
+    overflow:hidden;
+}
+
+.course-top{
+    height:8px;
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    background:linear-gradient(90deg,#2563eb,#7c3aed);
+}
+
+.course-card button{
+    margin-top:18px;
+}
+
+/* ================= BUTTON ================= */
+
+button{
+    border:none;
+    padding:10px 17px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.course-btn{
+    background:#2563eb;
+    color:white;
+}
+
+.course-btn:hover{
+    background:#1d4ed8;
+}
+
+/* ================= PROGRESS ================= */
+
+.progress-container{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.progress{
+    width:100%;
+    height:30px;
+    background:#e2e8f0;
+    border-radius:30px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:70%;
+    background:linear-gradient(90deg,#2563eb,#7c3aed);
+    color:white;
+    text-align:center;
+    line-height:30px;
+    font-weight:bold;
+    transition:.5s;
+}
+
+/* ================= KNOWLEDGE ================= */
+
+.knowledge{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.knowledge ul{
+    list-style:none;
+}
+
+.knowledge li{
+    padding:14px;
+    margin:8px 0;
+    background:#f8fafc;
+    border-radius:10px;
+    border-left:4px solid #2563eb;
+}
+
+/* ================= NOTIFICATION ================= */
+
+.notification{
+    position:fixed;
+    right:20px;
+    top:80px;
+    background:#16a34a;
+    color:white;
+    padding:15px 20px;
+    border-radius:10px;
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+    display:none;
+    z-index:1000;
+    animation:notification .4s ease;
+}
+
+@keyframes notification{
+    from{
+        transform:translateX(100px);
+        opacity:0;
+    }
+    to{
+        transform:translateX(0);
+        opacity:1;
+    }
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    text-align:center;
+    background:#0f172a;
+    color:white;
+    padding:25px;
+    margin-top:30px;
+}
+
+/* ================= HIDDEN ================= */
+
+.hidden{
+    display:none !important;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:800px){
+
+    nav{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    nav ul{
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:15px;
+    }
+
+    .user-area{
+        flex-direction:column;
+    }
+
+    header h1{
+        font-size:28px;
+    }
+
+    section{
+        padding:30px 5%;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+<py-script src="app1.py">
+  </py-script>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+<h1>🚀 CAPACITY CONNECT</h1>
+
+<p>
+Digital Capacity Building & Learning Management Portal
+</p>
+
+</header>
+
+
+<!-- ================= AUTH SECTION ================= -->
+
+<div id="authPage" class="auth-container">
+
+<div class="login-box">
+
+<!-- LOGIN -->
+
+<div id="loginForm">
+
+<h2>Welcome Back 👋</h2>
+
+<p class="subtitle">
+Login to your learning dashboard
+</p>
+
+<div class="input-group">
+
+<label>Username</label>
+
+<input
+type="text"
+id="username"
+placeholder="Enter Username"
+>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Password</label>
+
+<input
+type="password"
+id="password"
+placeholder="Enter Password"
+>
+
+</div>
+
+
+<button class="main-btn" onclick="login()">
+🔐 Login
+</button>
+
+<div class="switch">
+
+Don't have an account?
+
+<a onclick="showRegister()">Create New Account</a>
+
+</div>
+
+</div>
+
+
+<!-- REGISTER -->
+
+<div id="registerForm" class="hidden">
+
+<h2>Create Account 🆕</h2>
+
+<p class="subtitle">
+Register for Capacity Connect LMS
+</p>
+
+
+<div class="input-group">
+
+<label>Full Name</label>
+
+<input
+type="text"
+id="regName"
+placeholder="Enter Full Name"
+>
+
+</div>
+
+
+<div class="input-group">
+
+<label>New Username</label>
+
+<input
+type="text"
+id="regUsername"
+placeholder="Create Username"
+>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Password</label>
+
+<input
+type="password"
+id="regPassword"
+placeholder="Create Password"
+>
+
+</div>
+
+
+<div class="input-group">
+
+<label>Confirm Password</label>
+
+<input
+type="password"
+id="regConfirmPassword"
+placeholder="Confirm Password"
+>
+
+</div>
+
+
+<button class="main-btn" onclick="registerUser()">
+✨ Create Account
+</button>
+
+
+<div class="switch">
+
+Already have an account?
+
+<a onclick="showLogin()">Login Here</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================= PORTAL ================= -->
+
+<div id="portal" class="hidden">
+
+
+<!-- NAVIGATION -->
+
+<nav>
+
+<div class="logo">
+🚀 Capacity Connect
+</div>
+
+
+<ul>
+
+<li>
+<a href="#dashboard">Dashboard</a>
+</li>
+
+<li>
+<a href="#courses">Courses</a>
+</li>
+
+<li>
+<a href="#progress">Progress</a>
+</li>
+
+<li>
+<a href="#knowledge">Knowledge Hub</a>
+</li>
+
+</ul>
+
+
+<div class="user-area">
+
+<span class="user-name" id="displayUser">
+👤 User
+</span>
+
+<button class="logout" onclick="logout()">
+Logout
+</button>
+
+</div>
+
+</nav>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard">
+
+<h2 class="section-title">
+Welcome, <span id="welcomeName">User</span> 🎓
+</h2>
+
+<p class="section-subtitle">
+Continue your learning journey and build your professional capacity.
+</p>
+
+
+<div class="card-container">
+
+
+<div class="card">
+
+<div class="card-icon">
+📚
+</div>
+
+<h3>Total Courses</h3>
+
+<div class="stat-number">
+12
+</div>
+
+<p>Active Courses</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">
+🏆
+</div>
+
+<h3>Completed Trainings</h3>
+
+<div class="stat-number">
+8
+</div>
+
+<p>Trainings Completed</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">
+🎓
+</div>
+
+<h3>Certificates</h3>
+
+<div class="stat-number">
+5
+</div>
+
+<p>Certificates Earned</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">
+🔥
+</div>
+
+<h3>Learning Streak</h3>
+
+<div class="stat-number">
+7 Days
+</div>
+
+<p>Keep learning!</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= COURSES ================= -->
+
+<section id="courses">
+
+<h2 class="section-title">
+Available Courses 📚
+</h2>
+
+<p class="section-subtitle">
+Explore courses and improve your professional skills.
+</p>
+
+
+<div class="card-container">
+
+
+<div class="card course-card">
+
+<div class="course-top"></div>
+
+<div class="card-icon">
+💻
+</div>
+
+<h3>Web Development</h3>
+
+<p>
+Learn HTML, CSS and JavaScript to create modern websites.
+</p>
+
+<button
+class="course-btn"
+onclick="enroll('Web Development')"
+>
+Enroll Now
+</button>
+
+</div>
+
+
+<div class="card course-card">
+
+<div class="course-top"></div>
+
+<div class="card-icon">
+📊
+</div>
+
+<h3>Data Analytics</h3>
+
+<p>
+Learn Python, Power BI and data visualization techniques.
+</p>
+
+<button
+class="course-btn"
+onclick="enroll('Data Analytics')"
+>
+Enroll Now
+</button>
+
+</div>
+
+
+<div class="card course-card">
+
+<div class="course-top"></div>
+
+<div class="card-icon">
+🔐
+</div>
+
+<h3>Cyber Security</h3>
+
+<p>
+Learn network security, cyber ethics and security practices.
+</p>
+
+<button
+class="course-btn"
+onclick="enroll('Cyber Security')"
+>
+Enroll Now
+</button>
+
+</div>
+
+
+<div class="card course-card">
+
+<div class="course-top"></div>
+
+<div class="card-icon">
+🤖
+</div>
+
+<h3>Artificial Intelligence</h3>
+
+<p>
+Explore AI, machine learning and intelligent applications.
+</p>
+
+<button
+class="course-btn"
+onclick="enroll('Artificial Intelligence')"
+>
+Enroll Now
+</button>
+
+</div>
+
+
+<div class="card course-card">
+
+<div class="course-top"></div>
+
+<div class="card-icon">
+📱
+</div>
+
+<h3>Android Development</h3>
+
+<p>
+Build mobile applications using modern Android technologies.
+</p>
+
+<button
+class="course-btn"
+onclick="enroll('Android Development')"
+>
+Enroll Now
+</button>
+
+</div>
+
+
+<div class="card course-card">
+
+<div class="course-top"></div>
+
+<div class="card-icon">
+☁️
+</div>
+
+<h3>Cloud Computing</h3>
+
+<p>
+Learn cloud services, deployment and cloud infrastructure.
+</p>
+
+<button
+class="course-btn"
+onclick="enroll('Cloud Computing')"
+>
+Enroll Now
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= PROGRESS ================= -->
+
+<section id="progress">
+
+<h2 class="section-title">
+Training Progress 📈
+</h2>
+
+<p class="section-subtitle">
+Track your learning progress.
+</p>
+
+
+<div class="progress-container">
+
+<div class="progress">
+
+<div
+class="progress-bar"
+id="bar"
+style="width:70%"
+>
+70%
+</div>
+
+</div>
+
+<br>
+
+<button
+class="course-btn"
+onclick="increaseProgress()"
+>
+⚡ Update Progress
+</button>
+
+</div>
+
+</section>
+
+
+<!-- ================= KNOWLEDGE HUB ================= -->
+
+<section id="knowledge">
+
+<h2 class="section-title">
+Knowledge Sharing Hub 💡
+</h2>
+
+<p class="section-subtitle">
+Access useful learning resources and professional guides.
+</p>
+
+
+<div class="knowledge">
+
+<h3>📖 Latest Resources</h3>
+
+<ul>
+
+<li>
+📘 Leadership Development Guide
+</li>
+
+<li>
+🤖 AI & Machine Learning Handbook
+</li>
+
+<li>
+📋 Project Management Best Practices
+</li>
+
+<li>
+🌐 Digital Transformation Toolkit
+</li>
+
+<li>
+💻 Web Development Learning Guide
+</li>
+
+<li>
+🔐 Cyber Security Awareness Guide
+</li>
+
+</ul>
+
+</div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+<p>
+© 2026 Capacity Connect LMS Portal
+</p>
+
+<p style="margin-top:8px;opacity:.7;">
+Learn • Grow • Connect • Succeed 🚀
+</p>
+
+</footer>
+
+</div>
+
+
+<!-- NOTIFICATION -->
+
+<div
+id="notification"
+class="notification"
+>
+Success
+</div>
+
+
+<script>
+
+/* =========================================
+   DEFAULT USERS
+========================================= */
+
+let defaultUsers = [
+
+{
+username:"student1",
+password:"1234",
+name:"Student One"
+},
+
+{
+username:"student2",
+password:"5678",
+name:"Student Two"
+}
+
+];
+
+
+/* =========================================
+   LOAD REGISTERED USERS
+========================================= */
+
+let registeredUsers =
+JSON.parse(localStorage.getItem("capacityUsers")) || [];
+
+
+/* =========================================
+   SHOW LOGIN
+========================================= */
+
+function showLogin(){
+
+document.getElementById("loginForm")
+.classList.remove("hidden");
+
+document.getElementById("registerForm")
+.classList.add("hidden");
+
+}
+
+
+/* =========================================
+   SHOW REGISTER
+========================================= */
+
+function showRegister(){
+
+document.getElementById("loginForm")
+.classList.add("hidden");
+
+document.getElementById("registerForm")
+.classList.remove("hidden");
+
+}
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+function login(){
+
+let user =
+document.getElementById("username").value.trim();
+
+let pass =
+document.getElementById("password").value.trim();
+
+
+if(user === "" || pass === ""){
+
+showNotification(
+"⚠️ Please enter username and password",
+"red"
+);
+
+return;
+
+}
+
+
+/* Check default users */
+
+let foundUser =
+defaultUsers.find(
+u => u.username === user && u.password === pass
+);
+
+
+/* Check registered users */
+
+if(!foundUser){
+
+foundUser =
+registeredUsers.find(
+u => u.username === user && u.password === pass
+);
+
+}
+
+
+if(foundUser){
+
+document.getElementById("authPage")
+.classList.add("hidden");
+
+document.getElementById("portal")
+.classList.remove("hidden");
+
+
+document.getElementById("displayUser")
+.innerHTML =
+"👤 " + foundUser.name;
+
+document.getElementById("welcomeName")
+.innerHTML =
+foundUser.name;
+
+
+showNotification(
+"🎉 Welcome " + foundUser.name + "!",
+"green"
+);
+
+}
+
+else{
+
+showNotification(
+"❌ Invalid Username or Password",
+"red"
+);
+
+}
+
+}
+
+
+/* =========================================
+   REGISTER USER
+========================================= */
+
+function registerUser(){
+
+let name =
+document.getElementById("regName").value.trim();
+
+let username =
+document.getElementById("regUsername").value.trim();
+
+let password =
+document.getElementById("regPassword").value.trim();
+
+let confirmPassword =
+document.getElementById("regConfirmPassword").value.trim();
+
+
+if(
+name === "" ||
+username === "" ||
+password === "" ||
+confirmPassword === ""
+){
+
+showNotification(
+"⚠️ Please fill all fields",
+"red"
+);
+
+return;
+
+}
+
+
+if(password !== confirmPassword){
+
+showNotification(
+"❌ Passwords do not match",
+"red"
+);
+
+return;
+
+}
+
+
+/* Check username */
+
+let alreadyExists =
+defaultUsers.some(
+u => u.username === username
+)
+||
+registeredUsers.some(
+u => u.username === username
+);
+
+
+if(alreadyExists){
+
+showNotification(
+"⚠️ Username already exists",
+"red"
+);
+
+return;
+
+}
+
+
+/* Create user */
+
+let newUser = {
+
+name:name,
+username:username,
+password:password
+
+};
+
+
+registeredUsers.push(newUser);
+
+localStorage.setItem(
+"capacityUsers",
+JSON.stringify(registeredUsers)
+);
+
+
+showNotification(
+"🎉 Account created successfully!",
+"green"
+);
+
+
+/* Clear fields */
+
+document.getElementById("regName").value = "";
+
+document.getElementById("regUsername").value = "";
+
+document.getElementById("regPassword").value = "";
+
+document.getElementById("regConfirmPassword").value = "";
+
+
+/* Go login */
+
+setTimeout(
+function(){
+
+showLogin();
+
+},
+1000
+);
+
+}
+
+
+/* =========================================
+   COURSE ENROLLMENT
+========================================= */
+
+function enroll(course){
+
+showNotification(
+"🎓 Successfully Enrolled in " + course,
+"green"
+);
+
+}
+
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+function increaseProgress(){
+
+let bar =
+document.getElementById("bar");
+
+let current =
+parseInt(bar.style.width) || 70;
+
+
+if(current < 100){
+
+current += 10;
+
+if(current > 100){
+
+current = 100;
+
+}
+
+
+bar.style.width =
+current + "%";
+
+bar.innerHTML =
+current + "%";
+
+
+if(current === 100){
+
+showNotification(
+"🏆 Congratulations! Training Completed!",
+"green"
+);
+
+}
+
+else{
+
+showNotification(
+"📈 Progress Updated to " + current + "%",
+"green"
+);
+
+}
+
+}
+
+else{
+
+showNotification(
+"🏆 Your training is already 100% complete!",
+"green"
+);
+
+}
+
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+function logout(){
+
+document.getElementById("portal")
+.classList.add("hidden");
+
+document.getElementById("authPage")
+.classList.remove("hidden");
+
+
+document.getElementById("username").value = "";
+
+document.getElementById("password").value = "";
+
+
+showLogin();
+
+
+showNotification(
+"👋 You have been logged out",
+"green"
+);
+
+}
+
+
+/* =========================================
+   NOTIFICATION
+========================================= */
+
+function showNotification(message,type){
+
+let notification =
+document.getElementById("notification");
+
+notification.innerHTML = message;
+
+notification.style.display = "block";
+
+
+if(type === "red"){
+
+notification.style.background =
+"#ef4444";
+
+}
+
+else{
+
+notification.style.background =
+"#16a34a";
+
+}
+
+
+setTimeout(
+function(){
+
+notification.style.display =
+"none";
+
+},
+3000
+);
+
+}
+
+</script>
+
+</body>
+</html>
